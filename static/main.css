@@ -1,0 +1,14 @@
+.columnContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.posts {
+    flex: 0 0 300px;
+    background-color: red;
+}
+
+.details {
+    flex-grow: 1;
+    background-color: blue;
+}
