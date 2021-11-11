@@ -1,0 +1,33 @@
+{% import 'attach_image.html' as attach_image %}
+{% import 'edit.html' as edit %}
+{% import 'home.html' as home %}
+{% import 'login.html' as login %}
+{% import 'post.html' as post %}
+{% import 'register.html' as register %}
+{% import 'log.html' as log %}
+{% import 'header.html' as header %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Class Forum Tool">
+        <title>App Name</title>
+        <!-- styles -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    </head>
+    <body>
+        <div>
+            {{ header.headerComponent() }}
+        </div>
+        <div class="columnContainer">
+            <div class="posts">
+                {{ log.logComponent() }}
+            </div>
+            <div class="details">
+                {{ post.postComponent() }}
+            </div>
+        </div>
+    </body>
+</html>
