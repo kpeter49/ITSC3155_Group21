@@ -21,6 +21,9 @@
         <div>
             {{ header.headerComponent() }}
         </div>
+        <div>
+            <a href="{{ url_for('new_post') }}">New Post</a>
+        </div>
         <div class="columnContainer">
             <div class="posts">
                 {{ log.logComponent() }}

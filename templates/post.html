@@ -1,11 +1,11 @@
 {% macro postComponent() -%}
    <div>
-        <form method="POST">
+        <form action="newpost" method="POST">
             <p><label>Title</label></p>
-            <p><input type="text" value="Add title."/></p>
+            <p><input name="title" type="text" value="Add title."/></p>
             <p><label>Text</label></p>
             <p>
-                <textarea name="noteText"  rows="6" cols="0" >Add the content for the post here ...</textarea>
+                <textarea name="text"  rows="6" cols="0" >Add the content for the post here ...</textarea>
             </p>
             <input type="submit" value="Create Post"/>
         </form>
