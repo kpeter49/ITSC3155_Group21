@@ -11,5 +11,15 @@ app = Flask(__name__)     # create an app
 def index():
     return render_template('index.html')
 
+@app.route('/newpost', methods=['GET', 'POST'])
+def new_post():
+    if request.method == 'POST':
+        title = request.form['title']
+        text = request.form['text']
+        # TODO Update database
+
+        return redirect(url_for('index'))
+    else:
+        return render_template('post.html')
 
 app.run(host=os.getenv('IP', '127.0.0.1'),port=int(os.getenv('PORT', 5000)),debug=True)
