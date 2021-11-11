@@ -7,6 +7,7 @@
 {% import 'log.html' as log %}
 {% import 'header.html' as header %}
 
+<!---- The homepage -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -26,7 +27,7 @@
         </div>
         <div class="columnContainer">
             <div class="posts">
-                {{ log.logComponent() }}
+                {{ log.logComponent() }} <!--- Posts log component -->
             </div>
             <div class="details">
                 {{ post.postComponent() }}
