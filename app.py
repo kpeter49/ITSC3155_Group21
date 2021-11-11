@@ -24,10 +24,17 @@ def home():
 
 
 # code for index function
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    if request.method == 'POST':
+        if "view" in request.form.keys():
+            request.form['view']
+        elif "edit" in request.form.keys():
+            return redirect(url_for('edit', post_id=request.form['id']))
+    
+    my_posts = db.session.query(Post).all()
+    return render_template('index.html', posts=my_posts)
 
 @app.route('/newpost', methods=['GET', 'POST'])
 def new_post():
@@ -48,9 +55,20 @@ def new_post():
     else:
         return render_template('post.html')
 
-@app.route('/edit')
-def edit():
-    return render_template('edit.html')
+@app.route('/edit/<post_id>', methods=['GET', 'POST'])
+def edit(post_id):
+    if request.method == 'POST':
+        title = request.form['title']
+        text = request.form['text']
+        post = db.session.query(Post).filter_by(id=post_id).one()
+        post.title = title
+        post.text = text
+        db.session.add(post)
+        db.session.commit()
+        return redirect(url_for('index'))
+    else:
+        my_post = db.session.query(Post).filter_by(id=post_id).one()
+        return render_template('edit.html', post=my_post)
 
 
 @app.route('/header')

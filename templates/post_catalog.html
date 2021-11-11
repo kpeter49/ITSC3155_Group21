@@ -1,10 +1,13 @@
-{% macro catalogComponent() -%}
+{% macro catalogComponent(posts) -%}
    <div>
+        {% for post in posts %}
         <form action="" method="POST">
-            <p><label>Title</label></p>
-            <p><label>Text</label></p>
-            <input type="submit" value="View Post"/>
-            <input type="submit" value="Edit Post"/>
+            <input type="hidden" name="id" value="{{ post.id }}">
+            <p><label>{{ post.title }}</label></p>
+            <p><label>{{ post.text }}</label></p>
+            <input name="view" type="submit" value="View Post"/>
+            <input name="edit" type="submit" value="Edit Post"/>
         </form>
+        {% endfor %}
    </div>
 {%- endmacro %}

@@ -1,3 +1,15 @@
-{% macro editComponent() -%}
-    <p>Edit Component</p>
+{% macro editComponent(post) -%}
+    <div>
+        <form action="{{ post.id }}" method="POST">
+            <p><label>Title</label></p>
+            <p><input name="title" type="text" value="{{ post.title }}"/></p>
+            <p><label>Text</label></p>
+            <p>
+                <textarea name="text"  rows="6" cols="0" >{{ post.text }}</textarea>
+            </p>
+            <input type="submit" value="Create Post"/>
+        </form>
+    </div>
 {%- endmacro %}
+
+{{ editComponent(post) }}
