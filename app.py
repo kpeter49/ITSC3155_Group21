@@ -72,11 +72,6 @@ def edit(post_id):
         return render_template('edit.html', post=my_post)
 
 
-@app.route('/header')
-def header():
-    return render_template('header.html')
-
-
 # Delete post
 @app.route('/delete/<post_id>', methods=['POST'])
 def delete_post(post_id):
