@@ -1,0 +1,17 @@
+{% macro catalogComponent(posts) -%}
+<div>
+    {% for post in posts %}
+    <form action="" method="POST">
+        <input type="hidden" name="id" value="{{ post.id }}">
+        <p><label>{{ post.title }}</label></p>
+        <p><label>{{ post.text }}</label></p>
+        <input name="view" type="submit" value="View Post"/>
+        <input name="edit" type="submit" value="Edit Post"/>
+    </form>
+    <form action="{{ url_for('delete_post', post_id=post.id) }}" method="post">
+        <input type="submit" value="Delete"/>
+    </form>
+
+    {% endfor %}
+</div>
+{%- endmacro %}

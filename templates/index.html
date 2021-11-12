@@ -1,12 +1,13 @@
 {% import 'attach_image.html' as attach_image %}
-{% import 'edit.html' as edit %}
 {% import 'home.html' as home %}
 {% import 'login.html' as login %}
 {% import 'post.html' as post %}
 {% import 'register.html' as register %}
 {% import 'log.html' as log %}
 {% import 'header.html' as header %}
+{% import 'post_catalog.html' as catalog %}
 
+<!---- The homepage -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -21,12 +22,15 @@
         <div>
             {{ header.headerComponent() }}
         </div>
+        <div>
+            <a href="{{ url_for('new_post') }}">New Post</a>
+        </div>
         <div class="columnContainer">
             <div class="posts">
-                {{ log.logComponent() }}
+                {{ catalog.catalogComponent(posts) }}
             </div>
             <div class="details">
-                {{ post.postComponent() }}
+                
             </div>
         </div>
     </body>
