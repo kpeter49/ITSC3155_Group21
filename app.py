@@ -38,6 +38,7 @@ def index():
     return render_template('index.html', posts=my_posts)
 
 
+# create a new post
 @app.route('/newpost', methods=['GET', 'POST'])
 def new_post():
     if request.method == 'POST':
@@ -58,6 +59,7 @@ def new_post():
         return render_template('post.html')
 
 
+# edit post
 @app.route('/edit/<post_id>', methods=['GET', 'POST'])
 def edit(post_id):
     if request.method == 'POST':
@@ -79,6 +81,7 @@ def header():
     return render_template('header.html')
 
 
+# Delete post
 @app.route('/delete/<post_id>', methods=['POST'])
 def delete_post(post_id):
     post = db.session.query(Post).filter_by(id=post_id).one()
