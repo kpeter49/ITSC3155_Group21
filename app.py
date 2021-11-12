@@ -1,6 +1,6 @@
 # imports
-import os                 # os is used to get environment variables IP & PORT
-from flask import Flask, redirect, url_for   # Flask is the web app that we will customize
+import os  # os is used to get environment variables IP & PORT
+from flask import Flask, redirect, url_for  # Flask is the web app that we will customize
 from flask import render_template
 from flask import request
 from database import db
@@ -11,12 +11,13 @@ from datetime import date
 app = Flask(__name__)  # create an app
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///class_forum_app.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 # Setup models
 with app.app_context():
-    db.create_all()   # run under the app context
+    db.create_all()  # run under the app context
+
 
 @app.route('/home')
 def home():
@@ -32,16 +33,17 @@ def index():
             request.form['view']
         elif "edit" in request.form.keys():
             return redirect(url_for('edit', post_id=request.form['id']))
-    
+
     my_posts = db.session.query(Post).all()
     return render_template('index.html', posts=my_posts)
+
 
 @app.route('/newpost', methods=['GET', 'POST'])
 def new_post():
     if request.method == 'POST':
         title = request.form['title']
         text = request.form['text']
-        
+
         today = date.today()
 
         today = today.strftime("%m-%d-%Y")
@@ -54,6 +56,7 @@ def new_post():
         return redirect(url_for('index'))
     else:
         return render_template('post.html')
+
 
 @app.route('/edit/<post_id>', methods=['GET', 'POST'])
 def edit(post_id):
@@ -76,13 +79,13 @@ def header():
     return render_template('header.html')
 
 
-@app.route('/posts/delete/<post_id>', methods=['POST'])
+@app.route('/delete/<post_id>', methods=['POST'])
 def delete_post(post_id):
-    """my_post = db.session.query(Post).filter_by(id=post_id).one()
-    db.session.delete(my_post)
-    db.session.commit()"""
+    post = db.session.query(Post).filter_by(id=post_id).one()
+    db.session.delete(post)
+    db.session.commit()
 
-    return render_template('home.html')  # return statement not final
+    return redirect(url_for('index'))
 
 
-app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)),debug=True)
+app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)
