@@ -27,6 +27,7 @@ def index():
     if request.method == 'POST':
         if "view" in request.form.keys():
             request.form['view']
+            # return redirect(url_for('note'), post_id=request.form['id'])
         elif "edit" in request.form.keys():
             return redirect(url_for('edit', post_id=request.form['id']))
     # get all posts from database
