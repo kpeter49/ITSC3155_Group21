@@ -17,10 +17,10 @@
     <!-- navigation buttons -->
         <nav>
             <a href="{{ url_for('index') }}"> Home</a> ||
-	        <a href="{{ url_for('post') }}">Create Note</a>
+	        <a href="{{ url_for('new_post') }}">Create Note</a>
         </nav>
     <!-- post welcome message and include note details -->
-    <h1> Welcome {{user.name}} to UNC Charlotte Inquires App! </h1>
+    <h1> Welcome to UNC Charlotte Inquires App! </h1> <!-- TODO: Add username to welcome once sign in is implemented -->
     <h2> Note Details </h2>
 
     <!-- create a table with all these features -->

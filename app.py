@@ -28,6 +28,8 @@ def index():
         if "view" in request.form.keys():
             request.form['view']
             # return redirect(url_for('note'), post_id=request.form['id'])
+            my_post = db.session.query(Post).filter_by(id=request.form['id']).one()
+            return render_template('note.html', post_id=request.form['id'], note = my_post)
         elif "edit" in request.form.keys():
             return redirect(url_for('edit', post_id=request.form['id']))
     # get all posts from database
