@@ -29,14 +29,16 @@ def home():
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
+    # get user from database
+    a_user = db.session.query(User).filter_by(email='email@uncc.edu').one()
     if request.method == 'POST':
         if "view" in request.form.keys():
             request.form['view']
         elif "edit" in request.form.keys():
             return redirect(url_for('edit', post_id=request.form['id']))
-
+    # get all posts from database
     my_posts = db.session.query(Post).all()
-    return render_template('index.html', posts=my_posts)
+    return render_template('index.html', posts=my_posts, user=a_user)
 
 
 # create a new post
