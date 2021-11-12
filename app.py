@@ -24,8 +24,6 @@ with app.app_context():
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    # get user from database
-    # a_user = db.session.query(User).filter_by(email='email@uncc.edu').one()
     if request.method == 'POST':
         if "view" in request.form.keys():
             request.form['view']
