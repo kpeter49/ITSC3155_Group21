@@ -12,15 +12,17 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Class Forum Tool">
-        <title>App Name</title>
+        <title>UNC Charlotte Inquires App</title>
         <!-- styles -->
         <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     </head>
     <body>
         <div>
-            <a href="{{ url_for('new_post') }}">New Post</a>
             <a href="{{ url_for('index') }}"> Home </a>
+            <a href="{{ url_for('new_post') }}">New Post</a>
         </div>
+        <h1> Welcome to UNC Charlotte Inquires App! </h1>
+        <h2> All Notes </h2>
         <div class="columnContainer">
             <div class="posts">
                 {{ catalog.catalogComponent(posts) }}
