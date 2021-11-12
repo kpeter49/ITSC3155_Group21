@@ -10,6 +10,33 @@
         </title>
         <!-- specific styles - use main.css-->
         <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-    </head>
+    </head> <!-- Top of page -->
+
+    <!-- include categories like title, date, and preview -->
+    <body>
+    <!-- navigation buttons -->
+        <nav>
+            <a href="{{ url_for('index') }}"> Home</a> ||
+	        <a href="{{ url_for('post') }}">Create Note</a>
+        </nav>
+    <!-- post welcome message and include note details -->
+    <h1> Welcome {{user.name}} to UNC Charlotte Inquires App! </h1>
+    <h2> Note Details </h2>
+
+    <!-- create a table with all these features -->
+    <table>
+        <tr>
+            <th> Title</th>
+            <th> Text </th>
+            <th> Date </th>
+        </tr>
+        <!-- specify fields to place inside-->
+        <tr>
+            <td> {{ note.Title }} </td>
+            <td> {{ note.text }} </td>
+            <td> {{ note.Date}} </td>
+        </tr>
+    </table>
+    </body>
 
 </html>

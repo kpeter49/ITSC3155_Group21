@@ -19,11 +19,6 @@ with app.app_context():
     db.create_all()  # run under the app context
 
 
-@app.route('/home')
-def home():
-    return render_template('home.html')
-
-
 # code for index function
 # list posts
 @app.route('/', methods=['GET', 'POST'])
