@@ -25,6 +25,7 @@ def home():
 
 
 # code for index function
+# list posts
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
