@@ -1,5 +1,8 @@
 {% macro postComponent() -%}
    <div>
+       <a href="{{ url_for('index') }}"> Home </a>
+   </div>
+    <div>
         <form action="newpost" method="POST">
             <p><label>Title</label></p>
             <p><input name="title" type="text" value="Add title."/></p>

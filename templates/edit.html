@@ -1,4 +1,7 @@
 {% macro editComponent(post) -%}
+<nav>
+    <a href="{{ url_for('index') }}"> Home </a>
+</nav>
     <div>
         <form action="{{ post.id }}" method="POST">
             <p><label>Title</label></p>
