@@ -27,9 +27,8 @@ def index():
     if request.method == 'POST':
         if "view" in request.form.keys():
             request.form['view']
-            # return redirect(url_for('note'), post_id=request.form['id'])
             my_post = db.session.query(Post).filter_by(id=request.form['id']).one()
-            return render_template('note.html', post_id=request.form['id'], note = my_post)
+            return render_template('note.html', post_id=request.form['id'], note=my_post)
         elif "edit" in request.form.keys():
             return redirect(url_for('edit', post_id=request.form['id']))
     # get all posts from database
@@ -82,6 +81,37 @@ def delete_post(post_id):
     db.session.delete(post)
     db.session.commit()
 
+    return redirect(url_for('index'))
+
+
+# create user log of posts
+@app.route('/post_catalog.html')
+def user_log():
+    return render_template('post_catalog.html')
+
+
+# register a user
+@app.route('/register')
+def register():
+    return render_template('register.html')
+
+
+# login feature
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+
+# logout feature
+@app.route('/logout')
+def logout():
+    return redirect(url_for('index'))
+
+
+# filter posts
+# I want to filter responses by date posted
+@app.route('/filter')
+def filter_post():
     return redirect(url_for('index'))
 
 
