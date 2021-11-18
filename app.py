@@ -108,10 +108,16 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route('/image')
+def attach_image():
+    return redirect(url_for('index'))
+
+
 # filter posts
-# I want to filter responses by date posted
+# I want to filter responses by date posted, title, and the user who posted it
 @app.route('/filter')
 def filter_post():
+    # retrieve posts from database
     return redirect(url_for('index'))
 
 
