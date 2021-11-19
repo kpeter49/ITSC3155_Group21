@@ -1,12 +1,14 @@
 # imports
 import os  # os is used to get environment variables IP & PORT
-from flask import Flask, redirect, url_for  # Flask is the web app that we will customize
+from flask import Flask, session, redirect, url_for  # Flask is the web app that we will customize
 from flask import render_template
 from flask import request
 from database import db
 from models import Post as Post
 from models import User as User
+from models import Comment as Comment
 from datetime import date
+from forms import CommentForm
 
 app = Flask(__name__)  # create an app
 
@@ -119,6 +121,25 @@ def attach_image():
 def filter_post():
     # retrieve posts from database
     return redirect(url_for('index'))
+
+
+# Create a Comment
+@app.route('/notes/<note_id>/comment', methods=['POST'])
+def new_comment(note_id):
+    if session.get('user'):
+        comment_form = CommentForm()
+        # validate_on_submit only validates using POST
+        if comment_form.validate_on_submit():
+            # get comment data
+            comment_text = request.form['comment']
+            new_record = Comment(comment_text, int(note_id), session['user_id'])
+            db.session.add(new_record)
+            db.session.commit()
+
+        return redirect(url_for('get_note', note_id=note_id))
+
+    else:
+        return redirect(url_for('index'))
 
 
 app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)
