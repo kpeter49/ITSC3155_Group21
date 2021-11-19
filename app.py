@@ -1,12 +1,14 @@
 # imports
 import os  # os is used to get environment variables IP & PORT
-from flask import Flask, redirect, url_for  # Flask is the web app that we will customize
+from flask import Flask, session, redirect, url_for  # Flask is the web app that we will customize
 from flask import render_template
 from flask import request
 from database import db
 from models import Post as Post
 from models import User as User
+from models import Comment as Comment
 from datetime import date
+from forms import CommentForm
 
 app = Flask(__name__)  # create an app
 
