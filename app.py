@@ -8,12 +8,19 @@ from models import Post as Post
 from models import User as User
 from models import Comment as Comment
 from datetime import date
+from werkzeug.utils import secure_filename
+from sqlalchemy.sql import func
 from forms import CommentForm
 
 app = Flask(__name__)  # create an app
 
+
+UPLOAD_FOLDER = './static/images'
+ALLOWED_EXTENSIONS = {'png', 'jpg'}
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///class_forum_app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 db.init_app(app)
 
 # Setup models
@@ -37,6 +44,9 @@ def index():
     my_posts = db.session.query(Post).all()
     return render_template('index.html', posts=my_posts)
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # create a new post
 @app.route('/newpost', methods=['GET', 'POST'])
@@ -45,11 +55,33 @@ def new_post():
         title = request.form['title']
         text = request.form['text']
 
+        imageid = -1
+        image_type = ""
+
+        file = None
+        file_name = ""
+        if 'file' in request.files:
+            file = request.files['file']
+            file_name = file.filename
+        
+        if file.filename == '':
+            file = None
+
+        if file and allowed_file(file_name):
+            file_name = secure_filename(file.filename)
+            image_type = file_name.rsplit('.', 1)[1].lower()
+            imageid = db.session.query(func.max(Post.imageid)).scalar()
+            if imageid != None:
+                imageid += 1
+            else:
+                imageid = 0
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], str(imageid) + "." + file_name.rsplit('.', 1)[1].lower()))
+
         today = date.today()
 
         today = today.strftime("%m-%d-%Y")
 
-        new_post_object = Post(title, text, today)
+        new_post_object = Post(title, text, today, file_name, imageid, image_type)
 
         db.session.add(new_post_object)
         db.session.commit()
@@ -80,6 +112,8 @@ def edit(post_id):
 @app.route('/delete/<post_id>', methods=['POST'])
 def delete_post(post_id):
     post = db.session.query(Post).filter_by(id=post_id).one()
+    if (post.imageid != -1):
+        os.remove("./static/images/" + str(post.imageid) + "." + post.imagetype)
     db.session.delete(post)
     db.session.commit()
 

@@ -46,6 +46,11 @@
             <td> {{ note.date}} </td>
         </tr>
     </table>
+    {% if note.imageid != -1 %}
+        <img src="{{ "./static/images/" + note.imageid|string + "." + note.imagetype }}" alt="{{ note.imagename }}">
+    {% else %}
+        <p></p>
+    {% endif %}
     </body>
 
 </html>
