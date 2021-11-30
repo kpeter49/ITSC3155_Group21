@@ -1,7 +1,5 @@
 {% import 'attach_image.html' as attachImage %}
-{% import 'login.html' as login %}
 {% import 'post.html' as post %}
-{% import 'register.html' as register %}
 {% import 'log.html' as log %}
 {% import 'post_catalog.html' as catalog %}
 
@@ -27,6 +25,9 @@
                 <ul class="nav-links">
                     <li><a href="{{ url_for('index') }}">Home</a></li>
                     <li><a href="{{ url_for('new_post') }}">New Post</a></li>
+                    <li><a href="{{ url_for('login') }}">Log in</a></li>
+                    <li><a href="{{ url_for('register') }}">Sign up</a></li>
+                    <li><a href="{{ url_for('logout') }}">Log out</a></li>
                 </ul>
             </nav>
         </header>
