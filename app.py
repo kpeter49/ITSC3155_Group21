@@ -1,5 +1,7 @@
 # imports
 import os  # os is used to get environment variables IP & PORT
+from sqlite3 import Date
+
 from flask import Flask, session, redirect, url_for  # Flask is the web app that we will customize
 from flask import render_template
 from flask import request
@@ -65,7 +67,8 @@ def new_post():
         if 'file' in request.files:
             file = request.files['file']
             file_name = file.filename
-        
+
+        # check if there is no file specified
         if file.filename == '':
             file = None
 
@@ -114,7 +117,8 @@ def edit(post_id):
 @app.route('/delete/<post_id>', methods=['POST'])
 def delete_post(post_id):
     post = db.session.query(Post).filter_by(id=post_id).one()
-    if (post.imageid != -1):
+
+    if post.imageid != -1:
         os.remove("./static/images/" + str(post.imageid) + "." + post.imagetype)
     db.session.delete(post)
     db.session.commit()
@@ -147,11 +151,42 @@ def logout():
 
 
 # filter posts
-# I want to filter responses by date posted, title, and the user who posted it
-@app.route('/filter')
-def filter_post():
-    # retrieve posts from database
-    return redirect(url_for('index'))
+# I want to filter responses by date posted and the user who posted it
+# search for posts
+@app.route('/filter', methods=['GET'])
+def filter_post(search):
+    search_results = []
+    search_exp = search.data['search_results']
+    # get all search results and put them into list
+    if search_exp:
+        # if we filter by user
+        if search.data['select'] == 'User':
+            enquiry = db.session.query(Post, User).filter
+            (User.id == Post.user_id).filter(User.name.contains(search_exp))
+            search_results = [item[0] for item in enquiry.all()]
+        # search by post title
+        elif search.data['select'] == 'Post':
+            enquiry = db.session.query(Post).filter(Post.title.contains(search_exp))
+            search_results = enquiry.all()
+        # search by date posted
+        elif search.data['select'] == 'Date':
+            enquiry = db.session.query(Date).filter(Date.strftime('%m-%d-%Y'))
+            search_results = enquiry.all()
+        else:
+            enquiry = db.session.query(Post)
+            search_results = enquiry.all()
+    else:
+        enquiry = db.session.query(Post)
+        search_results = enquiry.all()
+
+    # if no search results were found
+    # return to the main page
+    if not search_results:
+        return redirect(url_for('/index'))
+    else:
+        db_table = Results(results)
+        db_table.border = True
+        return render_template('search_results.html', db_table=db_table)
 
 
 # Create a Comment
