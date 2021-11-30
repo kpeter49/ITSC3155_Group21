@@ -164,11 +164,29 @@ def filter_post(search):
             enquiry = db.session.query(Post, User).filter
             (User.id == Post.user_id).filter(User.name.contains(search_exp))
             search_results = [item[0] for item in enquiry.all()]
-    # retrieve all posts from database
-    # get date
+        # search by post title
+        elif search.data['select'] == 'Post':
+            enquiry = db.session.query(Post).filter(Post.title.contains(search_exp))
+            search_results = enquiry.all()
+        # search by date posted
+        elif search.data['select'] == 'Date':
+            enquiry = db.session.query(Date).filter(Date.strftime('%m-%d-%Y'))
+            search_results = enquiry.all()
+        else:
+            enquiry = db.session.query(Post)
+            search_results = enquiry.all()
+    else:
+        enquiry = db.session.query(Post)
+        search_results = enquiry.all()
 
-    # refresh the current page
-    return redirect(url_for('index'))
+    # if no search results were found
+    # return to the main page
+    if not search_results:
+        return redirect(url_for('/index'))
+    else:
+        db_table = Results(results)
+        db_table.border = True
+        return render_template('search_results.html', db_table=db_table)
 
 
 # Create a Comment
