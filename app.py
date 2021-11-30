@@ -161,7 +161,7 @@ def filter_post(search):
     if search_exp:
         # if we filter by user
         if search.data['select'] == 'User':
-            enquiry = db.session.query(Date, User).filter
+            enquiry = db.session.query(Post, User).filter
             (User.id == Post.user_id).filter(User.name.contains(search_exp))
             search_results = [item[0] for item in enquiry.all()]
     # retrieve all posts from database
