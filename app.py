@@ -10,9 +10,15 @@ from models import Post as Post
 from models import User as User
 from models import Comment as Comment
 from datetime import date
+from forms import RegisterForm, LoginForm
+from flask import session
+import bcrypt
+
+=======
 from werkzeug.utils import secure_filename
 from sqlalchemy.sql import func
 from forms import CommentForm
+
 
 app = Flask(__name__)  # create an app
 
@@ -133,20 +139,64 @@ def user_log():
 
 
 # register a user
-@app.route('/register')
+@app.route('/register', methods=['POST', 'GET'])
 def register():
-    return render_template('register.html')
+    form = RegisterForm()
+
+    if request.method == 'POST' and form.validate_on_submit():
+
+        h_password = bcrypt.hashpw(
+            request.form['password'].encode('utf-8'), bcrypt.gensalt())
+
+        username = request.form['username']
+
+        new_user = User(username, request.form['email'], h_password)
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        session['user'] = username
+        session['user_id'] = new_user.id  # access id value from user model of this newly added user
+
+        return redirect(url_for('index'))
+
+
+    return render_template('register.html', form=form)
 
 
 # login feature
-@app.route('/login')
+@app.route('/login', methods=['POST', 'GET'])
 def login():
-    return render_template('login.html')
+    login_form = LoginForm()
+
+    if login_form.validate_on_submit():
+
+        the_user = db.session.query(User).filter_by(email=request.form['email']).one()
+
+        if bcrypt.checkpw(request.form['password'].encode('utf-8'), the_user.password):
+
+            session['user'] = the_user.username
+            session['user_id'] = the_user.id
+
+            return redirect(url_for('index'))
+
+        # password check failed
+        # set error message to alert user
+        login_form.password.errors = ["Incorrect username or password."]
+        return render_template("login.html", form=login_form)
+    else:
+        # form did not validate or GET request
+        return render_template("login.html", form=login_form)
+
 
 
 # logout feature
 @app.route('/logout')
 def logout():
+
+    if session.get('user'):
+        session.clear()
+
     return redirect(url_for('index'))
 
 
