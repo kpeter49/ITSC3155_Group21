@@ -44,9 +44,11 @@ def index():
     my_posts = db.session.query(Post).all()
     return render_template('index.html', posts=my_posts)
 
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 # create a new post
 @app.route('/newpost', methods=['GET', 'POST'])
@@ -141,11 +143,6 @@ def login():
 # logout feature
 @app.route('/logout')
 def logout():
-    return redirect(url_for('index'))
-
-
-@app.route('/image')
-def attach_image():
     return redirect(url_for('index'))
 
 
