@@ -14,7 +14,6 @@ from forms import RegisterForm, LoginForm
 from flask import session
 import bcrypt
 
-=======
 from werkzeug.utils import secure_filename
 from sqlalchemy.sql import func
 from forms import CommentForm
