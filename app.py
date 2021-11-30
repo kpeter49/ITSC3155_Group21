@@ -18,9 +18,7 @@ from werkzeug.utils import secure_filename
 from sqlalchemy.sql import func
 from forms import CommentForm
 
-
 app = Flask(__name__)  # create an app
-
 
 UPLOAD_FOLDER = './static/images'
 ALLOWED_EXTENSIONS = {'png', 'jpg'}
@@ -81,11 +79,13 @@ def new_post():
             file_name = secure_filename(file.filename)
             image_type = file_name.rsplit('.', 1)[1].lower()
             imageid = db.session.query(func.max(Post.imageid)).scalar()
+
             if imageid != None:
                 imageid += 1
             else:
                 imageid = 0
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], str(imageid) + "." + file_name.rsplit('.', 1)[1].lower()))
+            file.save(
+                os.path.join(app.config['UPLOAD_FOLDER'], str(imageid) + "." + file_name.rsplit('.', 1)[1].lower()))
 
         today = date.today()
 
@@ -143,7 +143,6 @@ def register():
     form = RegisterForm()
 
     if request.method == 'POST' and form.validate_on_submit():
-
         h_password = bcrypt.hashpw(
             request.form['password'].encode('utf-8'), bcrypt.gensalt())
 
@@ -159,7 +158,6 @@ def register():
 
         return redirect(url_for('index'))
 
-
     return render_template('register.html', form=form)
 
 
@@ -173,7 +171,6 @@ def login():
         the_user = db.session.query(User).filter_by(email=request.form['email']).one()
 
         if bcrypt.checkpw(request.form['password'].encode('utf-8'), the_user.password):
-
             session['user'] = the_user.username
             session['user_id'] = the_user.id
 
@@ -188,11 +185,9 @@ def login():
         return render_template("login.html", form=login_form)
 
 
-
 # logout feature
 @app.route('/logout')
 def logout():
-
     if session.get('user'):
         session.clear()
 
@@ -233,9 +228,9 @@ def filter_post(search):
     if not search_results:
         return redirect(url_for('/index'))
     else:
-        db_table = Results(results)
-        db_table.border = True
-        return render_template('search_results.html', db_table=db_table)
+        # db_table = Results(results)
+        # db_table.border = True
+        return render_template('search_results.html')
 
 
 # Create a Comment
