@@ -10,15 +10,24 @@
         </title>
         <!-- specific styles - use main.css-->
         <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+        <!-- fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     </head> <!-- Top of page -->
 
     <!-- include categories like title, date, and preview -->
     <body>
     <!-- navigation buttons -->
-        <nav>
-            <a href="{{ url_for('index') }}"> Home</a> ||
-	        <a href="{{ url_for('new_post') }}">Create Note</a>
-        </nav>
+        <header>
+            <a class="logo" href="{{ url_for('index') }}">UNCC Inquires</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('new_post') }}">New Post</a></li>
+                </ul>
+            </nav>
+        </header>
     <!-- post welcome message and include note details -->
     <h1> Welcome to UNC Charlotte Inquires App! </h1> <!-- TODO: Add username to welcome once sign in is implemented -->
     <h2> Note Details </h2>
@@ -37,6 +46,11 @@
             <td> {{ note.date}} </td>
         </tr>
     </table>
+    {% if note.imageid != -1 %}
+        <img src="{{ "./static/images/" + note.imageid|string + "." + note.imagetype }}" alt="{{ note.imagename }}">
+    {% else %}
+        <p></p>
+    {% endif %}
     </body>
 
 </html>
