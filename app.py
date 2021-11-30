@@ -1,5 +1,7 @@
 # imports
 import os  # os is used to get environment variables IP & PORT
+from sqlite3 import Date
+
 from flask import Flask, session, redirect, url_for  # Flask is the web app that we will customize
 from flask import render_template
 from flask import request
@@ -65,7 +67,8 @@ def new_post():
         if 'file' in request.files:
             file = request.files['file']
             file_name = file.filename
-        
+
+        # check if there is no file specified
         if file.filename == '':
             file = None
 
@@ -114,7 +117,8 @@ def edit(post_id):
 @app.route('/delete/<post_id>', methods=['POST'])
 def delete_post(post_id):
     post = db.session.query(Post).filter_by(id=post_id).one()
-    if (post.imageid != -1):
+
+    if post.imageid != -1:
         os.remove("./static/images/" + str(post.imageid) + "." + post.imagetype)
     db.session.delete(post)
     db.session.commit()
@@ -147,10 +151,23 @@ def logout():
 
 
 # filter posts
-# I want to filter responses by date posted, title, and the user who posted it
-@app.route('/filter')
-def filter_post():
-    # retrieve posts from database
+# I want to filter responses by date posted and the user who posted it
+# search for posts
+@app.route('/filter', methods=['GET'])
+def filter_post(search):
+    search_results = []
+    search_exp = search.data['search_results']
+    # get all search results and put them into list
+    if search_exp:
+        # if we filter by user
+        if search.data['select'] == 'User':
+            enquiry = db.session.query(Date, User).filter
+            (User.id == Post.user_id).filter(User.name.contains(search_exp))
+            search_results = [item[0] for item in enquiry.all()]
+    # retrieve all posts from database
+    # get date
+
+    # refresh the current page
     return redirect(url_for('index'))
 
 
