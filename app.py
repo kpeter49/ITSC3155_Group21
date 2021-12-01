@@ -26,6 +26,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg'}
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///class_forum_app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['SECRET_KEY'] = 'SE3155'
 db.init_app(app)
 
 # Setup models
