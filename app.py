@@ -1,5 +1,7 @@
 # imports
 import os  # os is used to get environment variables IP & PORT
+from sqlite3 import Date
+
 from flask import Flask, session, redirect, url_for  # Flask is the web app that we will customize
 from flask import render_template
 from flask import request
@@ -8,12 +10,15 @@ from models import Post as Post
 from models import User as User
 from models import Comment as Comment
 from datetime import date
+from forms import RegisterForm, LoginForm
+from flask import session
+import bcrypt
+
 from werkzeug.utils import secure_filename
 from sqlalchemy.sql import func
 from forms import CommentForm
 
 app = Flask(__name__)  # create an app
-
 
 UPLOAD_FOLDER = './static/images'
 ALLOWED_EXTENSIONS = {'png', 'jpg'}
@@ -69,6 +74,7 @@ def new_post():
             file = request.files['file']
             file_name = file.filename
 
+        # check if there is no file specified
         if file.filename == '':
             file = None
 
@@ -76,11 +82,13 @@ def new_post():
             file_name = secure_filename(file.filename)
             image_type = file_name.rsplit('.', 1)[1].lower()
             imageid = db.session.query(func.max(Post.imageid)).scalar()
+
             if imageid != None:
                 imageid += 1
             else:
                 imageid = 0
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], str(imageid) + "." + file_name.rsplit('.', 1)[1].lower()))
+            file.save(
+                os.path.join(app.config['UPLOAD_FOLDER'], str(imageid) + "." + file_name.rsplit('.', 1)[1].lower()))
 
         today = date.today()
 
@@ -117,7 +125,8 @@ def edit(post_id):
 @app.route('/delete/<post_id>', methods=['POST'])
 def delete_post(post_id):
     post = db.session.query(Post).filter_by(id=post_id).one()
-    if (post.imageid != -1):
+
+    if post.imageid != -1:
         os.remove("./static/images/" + str(post.imageid) + "." + post.imagetype)
     db.session.delete(post)
     db.session.commit()
@@ -132,34 +141,99 @@ def user_log():
 
 
 # register a user
-@app.route('/register')
+@app.route('/register', methods=['POST', 'GET'])
 def register():
-    return render_template('register.html')
+    form = RegisterForm()
+
+    if request.method == 'POST' and form.validate_on_submit():
+        h_password = bcrypt.hashpw(
+            request.form['password'].encode('utf-8'), bcrypt.gensalt())
+
+        username = request.form['username']
+
+        new_user = User(username, request.form['email'], h_password)
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        session['user'] = username
+        session['user_id'] = new_user.id  # access id value from user model of this newly added user
+
+        return redirect(url_for('index'))
+
+    return render_template('register.html', form=form)
 
 
 # login feature
-@app.route('/login')
+@app.route('/login', methods=['POST', 'GET'])
 def login():
-    return render_template('login.html')
+    login_form = LoginForm()
+
+    if login_form.validate_on_submit():
+
+        the_user = db.session.query(User).filter_by(email=request.form['email']).one()
+
+        if bcrypt.checkpw(request.form['password'].encode('utf-8'), the_user.password):
+            session['user'] = the_user.username
+            session['user_id'] = the_user.id
+
+            return redirect(url_for('index'))
+
+        # password check failed
+        # set error message to alert user
+        login_form.password.errors = ["Incorrect username or password."]
+        return render_template("login.html", form=login_form)
+    else:
+        # form did not validate or GET request
+        return render_template("login.html", form=login_form)
 
 
 # logout feature
 @app.route('/logout')
 def logout():
-    return redirect(url_for('index'))
+    if session.get('user'):
+        session.clear()
 
-
-@app.route('/image')
-def attach_image():
     return redirect(url_for('index'))
 
 
 # filter posts
-# I want to filter responses by date posted, title, and the user who posted it
-@app.route('/filter')
-def filter_post():
-    # retrieve posts from database
-    return redirect(url_for('index'))
+# I want to filter responses by date posted and the user who posted it
+# search for posts
+@app.route('/filter', methods=['GET'])
+def filter_post(search):
+    search_results = []
+    search_exp = search.data['search_results']
+    # get all search results and put them into list
+    if search_exp:
+        # if we filter by user
+        if search.data['select'] == 'User':
+            enquiry = db.session.query(Post, User).filter
+            (User.id == Post.user_id).filter(User.name.contains(search_exp))
+            search_results = [item[0] for item in enquiry.all()]
+        # search by post title
+        elif search.data['select'] == 'Post':
+            enquiry = db.session.query(Post).filter(Post.title.contains(search_exp))
+            search_results = enquiry.all()
+        # search by date posted
+        elif search.data['select'] == 'Date':
+            enquiry = db.session.query(Date).filter(Date.strftime('%m-%d-%Y'))
+            search_results = enquiry.all()
+        else:
+            enquiry = db.session.query(Post)
+            search_results = enquiry.all()
+    else:
+        enquiry = db.session.query(Post)
+        search_results = enquiry.all()
+
+    # if no search results were found
+    # return to the main page
+    if not search_results:
+        return redirect(url_for('/index'))
+    else:
+        # db_table = Results(results)
+        # db_table.border = True
+        return render_template('search_results.html')
 
 
 # Create a Comment

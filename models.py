@@ -23,9 +23,18 @@ class Post(db.Model):
 
 class User(db.Model):
     id = db.Column("id", db.Integer, primary_key=True)
-    name = db.Column("name", db.String(100))
+    username = db.Column("username", db.String(100))
     email = db.Column("email", db.String(100))
-    comments = db.relationship("Comment", backref="user", lazy=True)
+    # comments = db.relationship("Comment", backref="user", lazy=True)
+    password = db.Column(db.String(255), nullable=False)
+    registered_on = db.Column(db.DateTime, nullable=False)
+
+
+    def __init__(self, username, email, password):
+        self.username = username
+        self.email = email
+        self.password = password
+        self.registered_on = datetime.date.today()
 
     def __init__(self, name, email):
         self.name = name
