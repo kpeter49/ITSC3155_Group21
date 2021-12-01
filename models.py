@@ -35,11 +35,11 @@ class User(db.Model):
         self.email = email
         self.password = password
         self.registered_on = datetime.date.today()
-
+'''
     def __init__(self, name, email):
         self.name = name
         self.email = email
-
+'''
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
