@@ -10,6 +10,7 @@ class Post(db.Model):
     imagename = db.Column("imagename", db.String(50))
     imageid = db.Column("imageid", db.Integer)
     imagetype = db.Column("imagetype", db.String(10))
+    comments = db.relationship("Comment", backref="note", cascade="all, delete-orphan", lazy=True)
 
     def __init__(self, title, text, date, imagename, imageid, imagetype):
         self.title = title
@@ -24,6 +25,7 @@ class User(db.Model):
     id = db.Column("id", db.Integer, primary_key=True)
     name = db.Column("name", db.String(100))
     email = db.Column("email", db.String(100))
+    comments = db.relationship("Comment", backref="user", lazy=True)
 
     def __init__(self, name, email):
         self.name = name
