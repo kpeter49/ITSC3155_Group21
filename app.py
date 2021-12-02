@@ -39,19 +39,22 @@ with app.app_context():
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    if request.method == 'POST':
-        if "view" in request.form.keys():
-            request.form['view']
-            my_post = db.session.query(Post).filter_by(id=request.form['id']).one()
-            # create a comment form object
-            form = CommentForm()
+    if session.get('user'):
+        if request.method == 'POST':
+            if "view" in request.form.keys():
+                request.form['view']
+                my_post = db.session.query(Post).filter_by(id=request.form['id']).one()
+                # create a comment form object
+                form = CommentForm()
 
-            return render_template('note.html', post_id=request.form['id'], note=my_post, form=form)
-        elif "edit" in request.form.keys():
-            return redirect(url_for('edit', post_id=request.form['id']))
-    # get all posts from database
-    my_posts = db.session.query(Post).all()
-    return render_template('index.html', posts=my_posts)
+                return render_template('note.html', post_id=request.form['id'], post=my_post, form=form)
+            elif "edit" in request.form.keys():
+                return redirect(url_for('edit', post_id=request.form['id']))
+        # get all posts from database
+        my_posts = db.session.query(Post).filter_by(user_id=session['user_id']).all()
+        return render_template('index.html', posts=my_posts, user=session['user'])
+    else:
+        return redirect(url_for('login'))
 
 
 def allowed_file(filename):
@@ -95,7 +98,7 @@ def new_post():
 
         today = today.strftime("%m-%d-%Y")
 
-        new_post_object = Post(title, text, today, file_name, imageid, image_type)
+        new_post_object = Post(title, text, today, file_name, imageid, image_type, session['user_id'])
 
         db.session.add(new_post_object)
         db.session.commit()
@@ -238,7 +241,7 @@ def filter_post(search):
 
 
 # Create a Comment
-@app.route('/notes/<note_id>/comment', methods=['POST'])
+@app.route('/notes/<post_id>/comment', methods=['POST'])
 def new_comment(post_id):
     if session.get('user'):
         comment_form = CommentForm()
@@ -250,7 +253,7 @@ def new_comment(post_id):
             db.session.add(new_record)
             db.session.commit()
 
-        return redirect(url_for('get_note', note_id=post_id))
+        return render_template('note.html', post_id=post_id)
 
     else:
         return redirect(url_for('index'))

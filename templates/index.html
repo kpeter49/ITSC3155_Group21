@@ -25,13 +25,16 @@
                 <ul class="nav-links">
                     <li><a href="{{ url_for('index') }}">Home</a></li>
                     <li><a href="{{ url_for('new_post') }}">New Post</a></li>
+                    {% if user %}
+                    <li><a href="{{ url_for('logout') }}">Log out</a></li>
+                    {% else %}
                     <li><a href="{{ url_for('login') }}">Log in</a></li>
                     <li><a href="{{ url_for('register') }}">Sign up</a></li>
-                    <li><a href="{{ url_for('logout') }}">Log out</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </header>
-        <h1> Welcome to UNCC Asks! </h1>
+        <h1> Welcome {{user}} to UNCC Asks! </h1>
         <h2> All Notes </h2>
         <div class="columnContainer">
             <div class="posts">
