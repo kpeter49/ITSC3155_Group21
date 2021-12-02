@@ -65,3 +65,27 @@ header {
     display: inline-block;
     padding: 0px 10px;
 }
+
+.post_title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.post_text {
+    font-size: 15px;
+}
+
+input {
+    background-color: rgb(13, 77, 26);
+    color: rgb(150,226,162);
+    padding: 10px;
+    margin-top: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.delete_button {
+    background-color: rgb(169,0,0);
+    color: white;
+}
