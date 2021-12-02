@@ -6,7 +6,7 @@
         <!-- Temporary name of product -->
         <meta name="description" content="UNC Charlotte Inquires App"> <!-- Gets the name of the app-->
         <title >
-            UNC Charlotte Inquires App - View Note
+            UNC Charlotte Inquires App - View Post
         </title>
         <!-- specific styles - use main.css-->
         <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
@@ -28,9 +28,9 @@
                 </ul>
             </nav>
         </header>
-    <!-- post welcome message and include note details -->
-    <h1> Welcome to UNC Charlotte Asks! </h1> <!-- TODO: Add username to welcome once sign in is implemented -->
-    <h2> Note Details </h2>
+    <!-- post welcome message and include post details -->
+    <h1> Welcome {{user}} to UNCC Asks! </h1>
+    <h2> Post Details </h2>
 
     <!-- create a table with all these features -->
     <table>
@@ -41,27 +41,27 @@
         </tr>
         <!-- specify fields to place inside-->
         <tr>
-            <td> {{ note.title }} </td>
-            <td> {{ note.text }} </td>
-            <td> {{ note.date}} </td>
+            <td> {{ post.title }} </td>
+            <td> {{ post.text }} </td>
+            <td> {{ post.date}} </td>
         </tr>
     </table>
-    {% if note.imageid != -1 %}
-        <img src="{{ "./static/images/" + note.imageid|string + "." + note.imagetype }}" alt="{{ note.imagename }}">
+    {% if post.imageid != -1 %}
+        <img src="{{ "./static/images/" + post.imageid|string + "." + post.imagetype }}" alt="{{ post.imagename }}">
     {% else %}
         <p></p>
     {% endif %}
-    {% if note.comments %}
-        {% if note.comments|length > 0 %}
+    {% if post.comments %}
+        {% if post.comments|length > 0 %}
             <h2>Comments</h2>
             <ul>
-            {% for comment in note.comments %}
+            {% for comment in post.comments %}
                 <li>{{ comment.content }}</li>
             {% endfor %}
             </ul>
         {% endif %}
     {% endif %}
-    <form action="{{ url_for('new_comment', note_id=note.id) }}" method="post">
+    <form action="{{ url_for('new_comment', post_id=post.id) }}" method="POST">
         <div class="formwrapper">
             <h2 class="title">Add a comment</h2>
                 <div class="form-field">

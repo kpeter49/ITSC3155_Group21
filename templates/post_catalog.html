@@ -10,7 +10,7 @@
             <input name="edit" type="submit" value="Edit Post"/>
             <input name="pin" type="button" value="Pin Post"/>
         </form>
-        <form action="{{ url_for('delete_post', post_id=post.id) }}" method="post">
+        <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">
             <input class="delete_button" type="submit" value="Delete"/>
         </form>
     </div>
