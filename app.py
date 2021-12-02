@@ -254,7 +254,7 @@ def new_comment(post_id):
             db.session.commit()
 
         my_post = db.session.query(Post).filter_by(id=post_id).one()
-        return render_template('note.html', post_id=post_id, post=my_post, form=comment_form)
+        return render_template('note.html', post_id=post_id, post=my_post, form=comment_form, user=session['user'])
 
     else:
         return redirect(url_for('index'))
