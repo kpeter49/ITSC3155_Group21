@@ -47,7 +47,7 @@ def index():
                 # create a comment form object
                 form = CommentForm()
 
-                return render_template('note.html', post_id=request.form['id'], post=my_post, form=form)
+                return render_template('note.html', post_id=request.form['id'], post=my_post, form=form, user=session['user'])
             elif "edit" in request.form.keys():
                 return redirect(url_for('edit', post_id=request.form['id']))
         # get all posts from database
