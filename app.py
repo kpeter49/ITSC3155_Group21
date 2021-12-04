@@ -261,8 +261,14 @@ def new_comment(post_id):
 
 
 # Pin Post
-@app.route('/pin/')
+@app.route('/pin/<post_id>', methods=['POST'])
 def pin_post(post_id):
+    post = db.session.query(Post).filter_by(id=post_id).one()
+    if not post.is_pinned:
+        post.is_pinned = True
+    elif post.is_pinned:
+        post.is_pinned = False
+    db.session.commit()
 
     return redirect(url_for('index'))
 

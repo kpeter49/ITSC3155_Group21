@@ -1,7 +1,7 @@
-{% macro catalogComponent(posts) -%}
+{% macro pinnedComponent(posts) -%}
 <div>
     {% for post in posts %}
-    {% if post.is_pinned == False %}
+    {% if post.is_pinned == True %}
     <div class="each-post">
         <form action="" method="POST">
             <input type="hidden" name="id" value="{{ post.id }}">
