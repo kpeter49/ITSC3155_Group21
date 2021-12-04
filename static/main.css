@@ -89,3 +89,29 @@ input {
     background-color: rgb(169,0,0);
     color: white;
 }
+
+.each-comment {
+    color: black;
+    font-size: 15px;
+}
+
+td {
+    padding: 0 20px;
+}
+
+.comment-form {
+    margin: 20px;
+}
+
+.add-comment-header {
+    padding-top: 15px;
+    margin: 0px;
+}
+
+.comments-header {
+    padding-top: 15px;
+}
+
+img {
+    margin: 20px;
+}
