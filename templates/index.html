@@ -34,7 +34,13 @@
                     <li><a href="{{ url_for('register') }}">Sign up</a></li>
                     {% endif %}
                 </ul>
-            </nav>
+            </nav> <!-- end of navigation -->
+            <!-- add temporary search bar to assist with filtering -->
+            <form id="form" role="search">
+                <input type="search" id="query" name="q" placeholder="Search...">
+                <button>Search</button>
+            </form>
+            
         </header>
         <h1> Welcome {{user}} to UNCC Asks! </h1>
         <h2> Pinned Posts </h2>

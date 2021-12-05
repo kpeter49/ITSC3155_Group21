@@ -47,7 +47,8 @@ def index():
                 # create a comment form object
                 form = CommentForm()
 
-                return render_template('note.html', post_id=request.form['id'], post=my_post, form=form, user=session['user'])
+                return render_template('note.html', post_id=request.form['id'], post=my_post, form=form,
+                                       user=session['user'])
             elif "edit" in request.form.keys():
                 return redirect(url_for('edit', post_id=request.form['id']))
         # get all posts from database
@@ -204,7 +205,7 @@ def logout():
 # filter posts
 # I want to filter responses by date posted and the user who posted it
 # search for posts
-@app.route('/filter', methods=['GET'])
+@app.route('/filter/<post_id>', methods=['GET'])
 def filter_post(search):
     search_results = []
     search_exp = search.data['search_results']
@@ -215,7 +216,7 @@ def filter_post(search):
             enquiry = db.session.query(Post, User).filter
             (User.id == Post.user_id).filter(User.name.contains(search_exp))
             search_results = [item[0] for item in enquiry.all()]
-        # search by post title
+        # search by post title (alphabetically)
         elif search.data['select'] == 'Post':
             enquiry = db.session.query(Post).filter(Post.title.contains(search_exp))
             search_results = enquiry.all()
@@ -228,7 +229,7 @@ def filter_post(search):
             search_results = enquiry.all()
     else:
         enquiry = db.session.query(Post)
-        search_results = enquiry.all()
+        search_results = enquiry.all()  # search all posts
 
     # if no search results were found
     # return to the main page
