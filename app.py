@@ -205,11 +205,17 @@ def logout():
 
 
 # filter posts
-# I want to filter responses by the title in alphabetical order
-@app.route('/index', methods=['GET'])
+@app.route('/filter/<post_title>', methods=['GET'])
 def filter_post_by_title():
     posts = models.Post.query.order_by(models.Post.title).all()
-    return render_template('post_catalog.html', title='Manage Posts', posts=posts)
+    return render_template(redirect(url_for('index')), title='Manage Posts', posts=posts)
+
+
+# filter posts by date
+@app.route('/filter/<post_date>', methods=['GET'])
+def filter_post_by_date_posted():
+    posts = models.Post.query.order_by(models.Post.date).all()
+    return render_template(redirect(url_for('index')), title='Manage Posts', posts=posts)
 
 
 # Create a Comment
