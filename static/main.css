@@ -30,6 +30,12 @@ h2 {
     border-style: solid;
     border-color: black;
     border-radius: 10px;
+    display: float;
+}
+
+.pin-btn {
+    float: left;
+    margin-right: 4px;
 }
 
 .details {

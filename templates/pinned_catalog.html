@@ -3,17 +3,17 @@
     {% for post in posts %}
     {% if post.is_pinned == True %}
     <div class="each-post">
-        <form action="" method="POST">
+        <form class="view-edit-btn" action="" method="POST">
             <input type="hidden" name="id" value="{{ post.id }}">
             <p><label class="post_title">{{ post.title }}</label></p>
             <p><label class="post_text">{{ post.text }}</label></p>
             <input name="view" type="submit" value="View Post"/>
             <input name="edit" type="submit" value="Edit Post"/>
         </form>
-        <form action="{{ url_for('pin_post', post_id=post.id) }}" method="POST">
+        <form class="pin-btn" action="{{ url_for('pin_post', post_id=post.id) }}" method="POST">
             <input name="pin" type="submit" value="Unpin Post"/>
         </form>
-        <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">
+        <form class="del-btn" action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">
             <input class="delete_button" type="submit" value="Delete"/>
         </form>
     </div>
