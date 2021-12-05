@@ -43,13 +43,19 @@
 
         </header>
         <h1> Welcome {{user}} to UNCC Asks! </h1>
+        
         <h2> Pinned Posts </h2>
+        <button>Filter</button>
         <div class="columnContainer">
             <div class="posts">
                 {{ pinned.pinnedComponent(posts) }}
             </div>
         </div>
+
+
+
         <h2> All Posts </h2>
+        <button>Filter</button>
         <div class="columnContainer">
             <div class="posts">
                 {{ catalog.catalogComponent(posts) }}
