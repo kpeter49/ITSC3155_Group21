@@ -5,6 +5,8 @@ from sqlite3 import Date
 from flask import Flask, session, redirect, url_for  # Flask is the web app that we will customize
 from flask import render_template
 from flask import request
+
+import models
 from database import db
 from models import Post as Post
 from models import User as User
@@ -203,42 +205,11 @@ def logout():
 
 
 # filter posts
-# I want to filter responses by date posted and the user who posted it
-# search for posts
-@app.route('/filter/<post_id>', methods=['GET'])
-def filter_post(search):
-    search_results = []
-    search_exp = search.data['search_results']
-    # get all search results and put them into list
-    if search_exp:
-        # if we filter by user
-        if search.data['select'] == 'User':
-            enquiry = db.session.query(Post, User).filter
-            (User.id == Post.user_id).filter(User.name.contains(search_exp))
-            search_results = [item[0] for item in enquiry.all()]
-        # search by post title (alphabetically)
-        elif search.data['select'] == 'Post':
-            enquiry = db.session.query(Post).filter(Post.title.contains(search_exp))
-            search_results = enquiry.all()
-        # search by date posted
-        elif search.data['select'] == 'Date':
-            enquiry = db.session.query(Date).filter(Date.strftime('%m-%d-%Y'))
-            search_results = enquiry.all()
-        else:
-            enquiry = db.session.query(Post)
-            search_results = enquiry.all()
-    else:
-        enquiry = db.session.query(Post)
-        search_results = enquiry.all()  # search all posts
-
-    # if no search results were found
-    # return to the main page
-    if not search_results:
-        return redirect(url_for('index'))
-    else:
-        # db_table = Results(results)
-        # db_table.border = True
-        return render_template('index.html')
+# I want to filter responses by the title in alphabetical order
+@app.route('/index', methods=['GET'])
+def filter_post_by_title():
+    posts = models.Post.query.order_by(models.Post.title).all()
+    return render_template('post_catalog.html', title='Manage Posts', posts=posts)
 
 
 # Create a Comment
