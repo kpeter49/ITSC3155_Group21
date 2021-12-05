@@ -12,6 +12,7 @@ class Post(db.Model):
     imagetype = db.Column("imagetype", db.String(10))
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     comments = db.relationship("Comment", backref="post", cascade="all, delete-orphan", lazy=True)
+    is_pinned = db.Column(db.Boolean, default=False)
 
     def __init__(self, title, text, date, imagename, imageid, imagetype, user_id):
         self.title = title

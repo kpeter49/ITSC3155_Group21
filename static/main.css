@@ -14,6 +14,7 @@ h2 {
 .columnContainer {
     display: flex;
     flex-direction: row;
+    margin-bottom: 20px;
 }
 
 .posts {
@@ -29,6 +30,12 @@ h2 {
     border-style: solid;
     border-color: black;
     border-radius: 10px;
+    display: float;
+}
+
+.pin-btn {
+    float: left;
+    margin-right: 4px;
 }
 
 .details {
@@ -88,4 +95,30 @@ input {
 .delete_button {
     background-color: rgb(169,0,0);
     color: white;
+}
+
+.each-comment {
+    color: black;
+    font-size: 15px;
+}
+
+td {
+    padding: 0 20px;
+}
+
+.comment-form {
+    margin: 20px;
+}
+
+.add-comment-header {
+    padding-top: 15px;
+    margin: 0px;
+}
+
+.comments-header {
+    padding-top: 15px;
+}
+
+img {
+    margin: 20px;
 }
