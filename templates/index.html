@@ -43,9 +43,11 @@
 
         </header>
         <h1> Welcome {{user}} to UNCC Asks! </h1>
-        
+
         <h2> Pinned Posts </h2>
-        <button>Filter</button>
+        {% if post %}
+            <button>Filter</button>
+        {% endif %}
         <div class="columnContainer">
             <div class="posts">
                 {{ pinned.pinnedComponent(posts) }}
@@ -55,7 +57,9 @@
 
 
         <h2> All Posts </h2>
-        <button>Filter</button>
+        {% if post %}
+            <button>Filter</button>
+        {% endif %}
         <div class="columnContainer">
             <div class="posts">
                 {{ catalog.catalogComponent(posts) }}

@@ -204,7 +204,7 @@ def logout():
     return redirect(url_for('index'))
 
 
-# filter posts
+# filter posts by title
 @app.route('/filter/<post_title>', methods=['GET'])
 def filter_post_by_title():
     posts = models.Post.query.order_by(models.Post.title).all()
