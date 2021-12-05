@@ -233,11 +233,11 @@ def filter_post(search):
     # if no search results were found
     # return to the main page
     if not search_results:
-        return redirect(url_for('/index'))
+        return redirect(url_for('index'))
     else:
         # db_table = Results(results)
         # db_table.border = True
-        return render_template('search_results.html')
+        return render_template('index.html')
 
 
 # Create a Comment
