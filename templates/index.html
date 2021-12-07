@@ -47,7 +47,9 @@
         <!-- View Pinned Posts -->
         <h2> Pinned Posts </h2>
         {% if post %}
-            <button>Filter</button>
+            <form method="POST">
+                <input name="filter" type="submit" value="Filter"/>
+            </form>
         {% endif %}
         <div class="columnContainer">
             <div class="posts">
@@ -60,7 +62,9 @@
         <h2> All Posts </h2>
         <!-- View other posts -->
         {% if post %}
-            <button>Filter</button>
+            <form method="POST">
+                <input name="filter" type="submit" value="Filter"/>
+            </form>
         {% endif %}
         <div class="columnContainer">
             <div class="posts">

@@ -42,6 +42,9 @@ with app.app_context():
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     if session.get('user'):
+        filter_by_date = "True"
+        if "filter_type" in request.args:
+            filter_by_date = request.args['filter_type']
         if request.method == 'POST':
             if "view" in request.form.keys():
                 request.form['view']
@@ -53,8 +56,17 @@ def index():
                                        user=session['user'])
             elif "edit" in request.form.keys():
                 return redirect(url_for('edit', post_id=request.form['id']))
+            elif "filter" in request.form.keys():
+                if filter_by_date == "True":
+                    filter_by_date = "False"
+                else:
+                    filter_by_date = "True"
+                return redirect(url_for('index', filter_type=filter_by_date))
         # get all posts from database
-        my_posts = db.session.query(Post).filter_by(user_id=session['user_id']).all()
+        if filter_by_date == "True":
+            my_posts = db.session.query(Post).all()
+        else:
+            my_posts = models.Post.query.order_by(models.Post.title).all()
         return render_template('index.html', posts=my_posts, user=session['user'])
     else:
         return redirect(url_for('login'))
