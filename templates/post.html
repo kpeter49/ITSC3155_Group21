@@ -1,8 +1,41 @@
 {% macro postComponent() -%}
-   <div>
-       <a href="{{ url_for('index') }}"> Home </a>
-   </div>
-    <div>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Class Forum Tool">
+        <title>UNC Charlotte Asks</title>
+        <!-- styles -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+        <!-- fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <header>
+            <a class="logo" href="{{ url_for('index') }}">UNCC Asks</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('new_post') }}">New Post</a></li>
+                    {% if user %}
+                    <li><a href="{{ url_for('logout') }}">Log out</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('login') }}">Log in</a></li>
+                    <li><a href="{{ url_for('register') }}">Sign up</a></li>
+                    {% endif %}
+                </ul>
+            </nav> <!-- end of navigation -->
+            <!-- add temporary search bar to assist with filtering -->
+            <form id="form" role="search">
+                <input type="search" id="query" name="q" placeholder="Search...">
+                <button type="submit"> Search</button>
+
+            </form>
+        </header>
+
         <form action="newpost" enctype=multipart/form-data method="POST">
             <p><label>Title</label></p>
             <p><input name="title" type="text" value="Add title."/></p>
@@ -16,7 +49,7 @@
             </p>
             <input type="submit" value="Create Post"/>
         </form>
-   </div>
 {%- endmacro %}
 
 {{ postComponent() }}
+
